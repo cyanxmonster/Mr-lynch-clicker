@@ -39,7 +39,7 @@ button {
     margin: 10px;
     cursor: pointer;
     border-radius: 5px;
-    width: 200px;
+    width: 30%;
 }
 ul{text-align: left;}
 button:disabled {
@@ -91,7 +91,7 @@ button:disabled {
     height: 30px;
     position: absolute;
     overflow: hidden;
-    animation: marquee 3s linear infinite;
+    animation: marquee 5s linear infinite;
   }
   .marquee span {
     float: left;

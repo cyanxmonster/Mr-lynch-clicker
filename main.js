@@ -117,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () =>
 			button.innerHTML = `${upgrade.name}<br>(Cost: ${upgrade.cost.toLocaleString()})`;
 			button.addEventListener("click", () =>
 			{
-				if (gameConfig.points >= upgrade.cost)
+				if (gameConfig.points >= upgrade.cost && (!upgrade.oneTime || !upgrade.isUpgraded)) 
 				{
 					gameConfig.points -= upgrade.cost;
 					upgrade.cost = Math.floor(upgrade.cost * 1.5);
