@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title></title>
+		<link rel="stylesheet" href="styles.css">
+		<script src=main.js></script>
+		<audio id='click' src="click.mp3"></audio>
+		<div class="menu">
+			<div class="menu-icon">☰</div>
+			<div class="dropdown-content">
+				<a href="#" onclick="alert('Mr Lynch Clicker, made by Trenton')">About</a>
+				<a href="#" id="saveButton">Save</a>
+				<a href="#" id="loadButton">Load</a>
+                <a href="#" id="deleteButton">Delete Save</a>
+			</div>
+		</div>
+	</head>
+	<body>
+		<div id="update-log">
+			<br>
+            <b>UPDATE 1.03</b>
+            <ul>
+                <li>MR LYNCH CLICKER IS BACK BABYYYYYYYYYYYYYYYYYYYYYY</li>
+            </ul><BR>
+			<b>Christmas Update</b>
+			<ul>
+				<li>Merry Christmas</li>
+			</ul>
+			<b>Update 1.02</b>
+			<small>Dec 23 2024</small>
+			<ul>
+				<li>Added Social Credits that are completely useless and are a placeholder if i want to do something else</li>
+				<li>mr lynches per second might be bugged if the autoclicker was bought before update 1.02</li>
+			</ul>
+			<b>Update 1.01</b>
+			<small>Dec 21 2024</small>
+			<ul>
+				<li>added saveload i think</li>
+				<li>disabled king von after autoclicker lvl 3</li>
+				<li>added the super duper fast autoclicker that totally doesnt do anything suspicious</li>
+				<li>space bar also clicks the button</li>
+			</ul>
+		</div>
+		<h1>mr lynch clicker</h1>
+		<div id="points">mr lynchs: 0</div>
+		<div class="center">
+			<div 
+				id="clickButton" 
+				class="centered" 
+				onmouseup="this.style.transform = 'scale(1)'"
+				onmouseleave="this.style.transform = 'scale(1)'"
+				onmousedown="this.style.transform = 'scale(0.8)'"
+				ontouchstart="this.style.transform = 'scale(0.8)'"
+				ontouchend="this.style.transform = 'scale(1)'"
+				ontouchcancel="this.style.transform = 'scale(1)'"
+				onclick="document.getElementById('click').cloneNode().play();">
+			</div>
+		</div>
+		<div id="shop">
+			<div id="upgrades">
+				<div class="center">
+				</div>
+				<div class="center">
+				</div>
+				<span>&zwnj;<span id="ppc">1</span></span>
+				<span id="pps">mr lynchs per second: </span>
+				<span id="socialcredits">social credit: </span>
+			</div>
+		</div>
+	</body>
