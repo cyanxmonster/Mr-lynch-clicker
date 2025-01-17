@@ -18,6 +18,18 @@ document.addEventListener('contextmenu', function(e)
 {
 	e.preventDefault();
 });
+function weightedRandom(obj) {
+	const keys = Object.keys(obj);
+	const weights = Object.values(obj);
+	const totalWeight = weights.reduce((sum, weight) => sum + weight, 0);
+	let random = Math.random() * totalWeight;
+	for (let i = 0; i < keys.length; i++) {
+	  random -= weights[i];
+	  if (random <= 0) {
+		return keys[i];  
+	  }
+	}
+}
 window.detect = detect;
 document.addEventListener('DOMContentLoaded', () =>
 {
@@ -67,6 +79,25 @@ document.addEventListener('DOMContentLoaded', () =>
 			{
 				detect("kvap.jpg", "sound.mp3");
 			}
+		},
+		{
+			id:'gamble',
+			name:'gamble 100 mr lynches',
+			cost:100,
+			effect: function(game)
+			 {
+				const chances = {
+					20: 0.003,
+					5: 0.03,
+					1.5:0.14,
+					1:0.32,
+					0.5:0.49,
+				  };
+				let gain = 100 * weightedRandom(chances);
+				alert(`You gained ${gain - 100} mr lynches`);
+				game.points += gain;
+				this.cost = 100;
+			},
 		},
 		{
 			id: 'china',
