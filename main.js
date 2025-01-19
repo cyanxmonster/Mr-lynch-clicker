@@ -18,22 +18,10 @@ document.addEventListener('contextmenu', function(e)
 {
 	e.preventDefault();
 });
-function weightedRandom(obj) {
-	const keys = Object.keys(obj);
-	const weights = Object.values(obj);
-	const totalWeight = weights.reduce((sum, weight) => sum + weight, 0);
-	let random = Math.random() * totalWeight;
-	for (let i = 0; i < keys.length; i++) {
-	  random -= weights[i];
-	  if (random <= 0) {
-		return keys[i];  
-	  }
-	}
-}
 window.detect = detect;
 document.addEventListener('DOMContentLoaded', () =>
 {
-	const gameConfig = {
+	let gameConfig = {
 		points: 0,
 		pointsPerClick: 1,
 		socialCredit: 0,
@@ -86,16 +74,7 @@ document.addEventListener('DOMContentLoaded', () =>
 			cost:100,
 			effect: function(game)
 			 {
-				const chances = {
-					20: 0.003,
-					5: 0.03,
-					1.5:0.14,
-					1:0.32,
-					0.5:0.49,
-				  };
-				let gain = 100 * weightedRandom(chances);
-				alert(`You gained ${gain - 100} mr lynches`);
-				game.points += gain;
+				flashing();
 				this.cost = 100;
 			},
 		},
@@ -165,7 +144,6 @@ document.addEventListener('DOMContentLoaded', () =>
 		localStorage.setItem("gameConfig", JSON.stringify(gameConfig));
 		alert("Game saved!");
 	}
-
 	function loadGame()
 	{
 		const savedConfig = localStorage.getItem("gameConfig");
@@ -193,6 +171,44 @@ document.addEventListener('DOMContentLoaded', () =>
 			alert("No saved game found.");
 		}
 	}
+	const numberDisplay = document.getElementById('numberDisplay');
+
+function flashing() {
+numberDisplay.style.display = 'block';
+  const numbers = []
+  for (i=-100;i<200;i++){
+	numbers.push(i)
+  }
+  let speed = 50; // Initial speed in milliseconds
+  let step = 0;
+
+  const targetNumber = numbers[Math.floor(Math.random() * numbers.length)]; // Pick a random target number
+
+  function updateNumber() {
+    if (step < 20) {
+      // Flash random numbers from the list
+      let randomIndex = Math.floor(Math.random() * numbers.length);
+      numberDisplay.textContent = numbers[randomIndex];
+
+      speed += 15; // Gradually slow down
+      step++;
+      
+      setTimeout(updateNumber, speed); // Schedule next update
+    } else {
+      // Final stop at the target number
+      numberDisplay.textContent = targetNumber;
+	  gameConfig.points += targetNumber;
+	  updateDisplay();
+      setTimeout(() => {
+		if ((targetNumber - 100) < 0){alert(`You lost ${Math.abs(targetNumber - 100)} mr lynches loser`)}
+        else{alert(`You recieved ${targetNumber - 100} mr lynches 🎉`)};
+		numberDisplay.style.display = 'none';
+      }, 500);
+    }
+  }
+
+  updateNumber(); // Start flashing numbers
+}
 
 	function deleteSave()
 	{
