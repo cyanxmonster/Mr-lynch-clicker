@@ -72,11 +72,7 @@ button:disabled {
     overflow:auto;
     border: 3px solid black
 }
-@media (max-width: 768px) {
-    #update-log {
-        display:none;
-    }
-}
+
 .marquee {
     height: 20px;
     width: 100%;
@@ -145,4 +141,12 @@ button:disabled {
     transform: translate(-50%,-50%);
     z-index: 1;
     display:none;
+}
+@media (max-width: 768px) {
+    #update-log {
+        display:none;
+    }
+    #numberDisplay {
+        font-size: 200px;
+    }
 }
