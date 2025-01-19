@@ -176,7 +176,7 @@ document.addEventListener('DOMContentLoaded', () =>
 function flashing() {
 numberDisplay.style.display = 'block';
   const numbers = []
-  for (i=-100;i<200;i++){
+  for (i=-50;i<200;i++){
 	numbers.push(i)
   }
   let speed = 50; // Initial speed in milliseconds
