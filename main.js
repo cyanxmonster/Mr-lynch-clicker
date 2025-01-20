@@ -179,23 +179,17 @@ numberDisplay.style.display = 'block';
   for (i=-50;i<200;i++){
 	numbers.push(i)
   }
-  let speed = 50; // Initial speed in milliseconds
+  let speed = 50;
   let step = 0;
-
-  const targetNumber = numbers[Math.floor(Math.random() * numbers.length)]; // Pick a random target number
-
+  const targetNumber = numbers[Math.floor(Math.random() * numbers.length)];
   function updateNumber() {
     if (step < 20) {
-      // Flash random numbers from the list
       let randomIndex = Math.floor(Math.random() * numbers.length);
       numberDisplay.textContent = numbers[randomIndex];
-
-      speed += 15; // Gradually slow down
-      step++;
-      
-      setTimeout(updateNumber, speed); // Schedule next update
+      speed += 15;
+      step++;    
+      setTimeout(updateNumber, speed); 
     } else {
-      // Final stop at the target number
       numberDisplay.textContent = targetNumber;
 	  gameConfig.points += targetNumber;
 	  updateDisplay();
