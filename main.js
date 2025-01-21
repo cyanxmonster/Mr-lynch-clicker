@@ -194,7 +194,7 @@ numberDisplay.style.display = 'block';
 	  gameConfig.points += targetNumber;
 	  updateDisplay();
       setTimeout(() => {
-		if ((targetNumber - 100) < 0){alert(`You lost ${Math.abs(targetNumber - 100)} mr lynches loser`)}
+		if ((targetNumber - 100) < 0){alert(`You lost ${Math.abs(targetNumber - 100)} mr lynches🥳🥳🎊`)}
         else{alert(`You recieved ${targetNumber - 100} mr lynches 🎉`)};
 		numberDisplay.style.display = 'none';
       }, 500);
