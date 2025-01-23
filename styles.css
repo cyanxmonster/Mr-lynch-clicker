@@ -6,6 +6,7 @@ body {
     background-color: #f0f0f0;
 }
 * {
+    box-sizing: border-box;
     user-select: none; /* Prevent text selection on the entire page */
     -webkit-user-select: none; /* For WebKit browsers */
     -moz-user-select: none; /* For Firefox */
@@ -54,6 +55,15 @@ button:disabled {
     height: auto;
     pointer-events: none; /* So the clickButton is still clickable */
 }
+#graybg {
+    cursor:not-allowed;
+    position: absolute;
+    top:0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+}
 #shop {
     margin-top: 30px;
     overflow:auto;
@@ -70,7 +80,8 @@ button:disabled {
     top: 1;
     left: 0;
     overflow:auto;
-    border: 3px solid black
+    border: 3px solid black;
+    z-index:-100;
 }
 
 .marquee {
@@ -133,15 +144,66 @@ button:disabled {
 .menu.active .dropdown-content {
     display: flex;
 }
-#numberDisplay {
-    font-size: 400px;
+#unbox-area{
+    display:none;
     position:fixed;
     top:50%;
     left: 50%;
     transform: translate(-50%,-50%);
-    z-index: 1;
-    display:none;
 }
+  #cardList {
+    height: 100px;
+    width: 800px;
+    position: relative;
+    border: 2px solid black;
+    overflow: hidden;
+    white-space: nowrap;
+  } 
+  .card {
+    display: inline-block;
+    background-color: red;
+    text-align: center;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    width: 100px;
+    height: 100px;
+  } 
+  .arrow-down {
+    margin-left: 380px;
+    width: 0; 
+    height: 0; 
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    
+    border-top: 20px solid #f00;
+  }
+  .bounce {
+    position: absolute;
+    animation: bounce 1s ease-out, fade-out 1s ease-out;
+    pointer-events: none;
+    scale:0.1;
+    transition: transform ease-out 1s;
+}
+@keyframes bounce {
+    0% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-200px);
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fade-out {
+    0% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
 @media (max-width: 768px) {
     #update-log {
         display:none;

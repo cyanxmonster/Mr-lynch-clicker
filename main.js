@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () =>
 			cost:100,
 			effect: function(game)
 			 {
-				flashing();
+				openCase();
 				this.cost = 100;
 			},
 		},
@@ -89,6 +89,7 @@ document.addEventListener('DOMContentLoaded', () =>
 			},
 		}],
 	};
+	const graybg = document.getElementById("graybg")
 	const pointsDisplay = document.getElementById("points");
 	const clickButton = document.getElementById("clickButton");
 	const upgradesContainer = document.getElementById("upgrades");
@@ -171,39 +172,50 @@ document.addEventListener('DOMContentLoaded', () =>
 			alert("No saved game found.");
 		}
 	}
-	const numberDisplay = document.getElementById('numberDisplay');
-
-function flashing() {
-numberDisplay.style.display = 'block';
-  const numbers = []
-  for (i=-50;i<200;i++){
-	numbers.push(i)
-  }
-  let speed = 50;
-  let step = 0;
-  const targetNumber = numbers[Math.floor(Math.random() * numbers.length)];
-  function updateNumber() {
-    if (step < 20) {
-      let randomIndex = Math.floor(Math.random() * numbers.length);
-      numberDisplay.textContent = numbers[randomIndex];
-      speed += 15;
-      step++;    
-      setTimeout(updateNumber, speed); 
-    } else {
-      numberDisplay.textContent = targetNumber;
-	  gameConfig.points += targetNumber;
-	  updateDisplay();
-      setTimeout(() => {
-		if ((targetNumber - 100) < 0){alert(`You lost ${Math.abs(targetNumber - 100)} mr lynches🥳🥳🎊`)}
-        else{alert(`You recieved ${targetNumber - 100} mr lynches 🎉`)};
-		numberDisplay.style.display = 'none';
-      }, 500);
-    }
-  }
-
-  updateNumber(); // Start flashing numbers
-}
-
+	const items = { common: '<b>+50<b>', uncommon: '<b>+110<b>', rare: '<b>+150<b>', epic: '<b>+200<b>', legendary: '<b>+1000<b>' };
+	const cardList = document.getElementById('cardList');
+	function resetCase() {
+	  cardList.innerHTML = ''; 
+	  for (let i = 0; i < 210; i++) {
+		const rand = Math.random() * 100;
+		let rarity, item;
+		if (rand < 1) { rarity = 1000; item = items.legendary; } 
+		else if (rand < 5) { rarity = 200; item = items.epic; } 
+		else if (rand < 10) { rarity = 150; item = items.rare; } 
+		else if (rand < 50) { rarity = 110; item = items.uncommon; } 
+		else { rarity = 50; item = items.common; }
+		const element = `<div class="card" style="background-color: white;" data-rarity="${rarity}" id="itemNumber${i}">${item}</div>`;
+		cardList.insertAdjacentHTML('beforeend', element);
+	  }
+	  document.querySelector('.card').style.marginLeft = '-1000px';
+	}
+	function openCase() {
+	  const unbox = document.getElementById("unbox-area");
+	  unbox.style.display = 'block';
+	  graybg.style.display = 'block';
+	  resetCase();
+	  const rand = Math.floor(Math.random() * 20000) + 1000;
+	  const childNumber = Math.floor(rand / 100) + 4;
+	  const reward = document.querySelector(`#itemNumber${childNumber}`).getAttribute('data-rarity');
+	  document.querySelector('.card').animate(
+		[
+		  { marginLeft: '0px' },
+		  { marginLeft: `-${rand}px` }
+		],
+		{
+		  duration: 5000,
+		  easing: "cubic-bezier(.4,0,.3,1)",
+		  fill: 'forwards'
+		}
+	  ).onfinish = () => {
+		alert(`You have received ${parseInt(reward)} mr lynches`);
+		gameConfig.points += parseInt(reward);
+		unbox.style.display = 'none';
+		graybg.style.display = 'none';
+		updateDisplay();
+	  }
+	}
+	
 	function deleteSave()
 	{
 		localStorage.removeItem("gameConfig");
@@ -247,10 +259,26 @@ numberDisplay.style.display = 'block';
 		window.gameRoutine = gameRoutine;
 	})();
 	//ismael it is right here :) ^^^^^
+	document.getElementById("graybg").addEventListener("click", function(event) {
+		event.stopPropagation();
+	});
+	document.addEventListener("mousemove", (event) => {
+		cursorX = event.clientX;
+		cursorY = event.clientY;
+	});
 	clickButton.addEventListener("click", () =>
-	{
+	{	
 		gameConfig.points += gameConfig.pointsPerClick;
 		updateDisplay();
+		const element = clickButton.cloneNode();
+		element.classList.add("bounce");
+		element.style.left = `${cursorX-90}px`;
+		element.style.top = `${cursorY-90}px`;
+		document.body.appendChild(element);
+		element.addEventListener("animationend", () =>
+		{
+			element.remove();
+		});
 	});
 	const clickSound = new Audio('click.mp3');
 	document.addEventListener("keyup", (event) =>
@@ -261,12 +289,22 @@ numberDisplay.style.display = 'block';
 			updateDisplay();
 			clickSound.cloneNode().play();
 			document.getElementById("clickButton").style.transform = 'scale(1)';
+			const element = clickButton.cloneNode();
+		element.classList.add("bounce");
+		element.style.left = `${cursorX-90}px`;
+		element.style.top = `${cursorY-90}px`;
+		document.body.appendChild(element);
+		element.addEventListener("animationend", () =>
+		{
+			element.remove();
+		});  
 		}
 	});
 	document.addEventListener("keydown", (event) =>
 	{
 		if (event.code === "Space")
 		{
+			event.preventDefault();
 			document.getElementById("clickButton").style.transform = 'scale(0.8)';
 		}
 	});
