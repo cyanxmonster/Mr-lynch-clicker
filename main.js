@@ -69,11 +69,11 @@ document.addEventListener('DOMContentLoaded', () =>
 			}
 		},
 		{
-			id:'gamble',
-			name:'gamble 100 mr lynches',
-			cost:100,
+			id: 'gamble',
+			name: 'gamble 100 mr lynches',
+			cost: 100,
 			effect: function(game)
-			 {
+			{
 				openCase();
 				this.cost = 100;
 			},
@@ -128,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () =>
 			button.innerHTML = `${upgrade.name}<br>(Cost: ${upgrade.cost.toLocaleString()})`;
 			button.addEventListener("click", () =>
 			{
-				if (gameConfig.points >= upgrade.cost && (!upgrade.oneTime || !upgrade.isUpgraded)) 
+				if (gameConfig.points >= upgrade.cost && (!upgrade.oneTime || !upgrade.isUpgraded))
 				{
 					gameConfig.points -= upgrade.cost;
 					upgrade.cost = Math.floor(upgrade.cost * 1.5);
@@ -145,6 +145,7 @@ document.addEventListener('DOMContentLoaded', () =>
 		localStorage.setItem("gameConfig", JSON.stringify(gameConfig));
 		alert("Game saved!");
 	}
+
 	function loadGame()
 	{
 		const savedConfig = localStorage.getItem("gameConfig");
@@ -172,50 +173,84 @@ document.addEventListener('DOMContentLoaded', () =>
 			alert("No saved game found.");
 		}
 	}
-	const items = { common: '<b>+50<b>', uncommon: '<b>+110<b>', rare: '<b>+150<b>', epic: '<b>+200<b>', legendary: '<b>+1000<b>' };
+	const itemIcons = {
+		common: '<b>+50<b>',
+		uncommon: '<b>+110<b>',
+		rare: '<b>+150<b>',
+		epic: '<b>+200<b>',
+		legendary: '<b>+1000<b>'
+	};
 	const cardList = document.getElementById('cardList');
-	function resetCase() {
-	  cardList.innerHTML = ''; 
-	  for (let i = 0; i < 210; i++) {
-		const rand = Math.random() * 100;
-		let rarity, item;
-		if (rand < 1) { rarity = 1000; item = items.legendary; } 
-		else if (rand < 5) { rarity = 200; item = items.epic; } 
-		else if (rand < 10) { rarity = 150; item = items.rare; } 
-		else if (rand < 50) { rarity = 110; item = items.uncommon; } 
-		else { rarity = 50; item = items.common; }
-		const element = `<div class="card" style="background-color: white;" data-rarity="${rarity}" id="itemNumber${i}">${item}</div>`;
-		cardList.insertAdjacentHTML('beforeend', element);
-	  }
-	  document.querySelector('.card').style.marginLeft = '-1000px';
-	}
-	function openCase() {
-	  const unbox = document.getElementById("unbox-area");
-	  unbox.style.display = 'block';
-	  graybg.style.display = 'block';
-	  resetCase();
-	  const rand = Math.floor(Math.random() * 20000) + 1000;
-	  const childNumber = Math.floor(rand / 100) + 4;
-	  const reward = document.querySelector(`#itemNumber${childNumber}`).getAttribute('data-rarity');
-	  document.querySelector('.card').animate(
-		[
-		  { marginLeft: '0px' },
-		  { marginLeft: `-${rand}px` }
-		],
+
+	function resetCase()
+	{
+		cardList.innerHTML = '';
+		for (let i = 0; i < 210; i++)
 		{
-		  duration: 5000,
-		  easing: "cubic-bezier(.4,0,.3,1)",
-		  fill: 'forwards'
+			const rand = Math.random() * 100;
+			let rarity, item;
+			if (rand < 1)
+			{
+				rarity = 1000;
+				item = itemIcons.legendary;
+			}
+			else if (rand < 5)
+			{
+				rarity = 200;
+				item = itemIcons.epic;
+			}
+			else if (rand < 10)
+			{
+				rarity = 150;
+				item = itemIcons.rare;
+			}
+			else if (rand < 50)
+			{
+				rarity = 110;
+				item = itemIcons.uncommon;
+			}
+			else
+			{
+				rarity = 50;
+				item = itemIcons.common;
+			}
+			const element = `<div class="card" style="background-color: white;" data-rarity="${rarity}" id="itemNumber${i}">${item}</div>`;
+			cardList.insertAdjacentHTML('beforeend', element);
 		}
-	  ).onfinish = () => {
-		alert(`You have received ${parseInt(reward)} mr lynches`);
-		gameConfig.points += parseInt(reward);
-		unbox.style.display = 'none';
-		graybg.style.display = 'none';
-		updateDisplay();
-	  }
+		document.querySelector('.card').style.marginLeft = '-1000px';
 	}
-	
+
+	function openCase()
+	{
+		const unbox = document.getElementById("unbox-area");
+		unbox.style.display = 'block';
+		graybg.style.display = 'block';
+		resetCase();
+		const rand = Math.floor(Math.random() * 20000) + 1000;
+		const childNumber = Math.floor(rand / 100) + 4;
+		const reward = document.querySelector(`#itemNumber${childNumber}`).getAttribute('data-rarity');
+		document.querySelector('.card').animate(
+			[
+			{
+				marginLeft: '0px'
+			},
+			{
+				marginLeft: `-${rand}px`
+			}],
+			{
+				duration: 5000,
+				easing: "cubic-bezier(.4,0,.3,1)",
+				fill: 'forwards'
+			}).onfinish = () =>
+		{
+			alert(`You have received ${parseInt(reward)} mr lynches`);
+			gameConfig.points += parseInt(reward);
+			unbox.style.display = 'none';
+			graybg.style.display = 'none';
+			updateDisplay();
+		}
+	}
+
 	function deleteSave()
 	{
 		localStorage.removeItem("gameConfig");
@@ -248,7 +283,7 @@ document.addEventListener('DOMContentLoaded', () =>
 				for (let i = 0; i < e; i++)
 				{
 					gameState.effect(game);
-               game.pointsPerClick += 1;
+					game.pointsPerClick += 1;
 				}
 				gameState.cost = 0;
 				updateDisplay();
@@ -259,15 +294,17 @@ document.addEventListener('DOMContentLoaded', () =>
 		window.gameRoutine = gameRoutine;
 	})();
 	//ismael it is right here :) ^^^^^
-	document.getElementById("graybg").addEventListener("click", function(event) {
+	document.getElementById("graybg").addEventListener("click", function(event)
+	{
 		event.stopPropagation();
 	});
-	document.addEventListener("mousemove", (event) => {
+	document.addEventListener("mousemove", (event) =>
+	{
 		cursorX = event.clientX;
 		cursorY = event.clientY;
 	});
 	clickButton.addEventListener("click", () =>
-	{	
+	{
 		gameConfig.points += gameConfig.pointsPerClick;
 		updateDisplay();
 		const element = clickButton.cloneNode();
@@ -290,14 +327,14 @@ document.addEventListener('DOMContentLoaded', () =>
 			clickSound.cloneNode().play();
 			document.getElementById("clickButton").style.transform = 'scale(1)';
 			const element = clickButton.cloneNode();
-		element.classList.add("bounce");
-		element.style.left = `${cursorX-90}px`;
-		element.style.top = `${cursorY-90}px`;
-		document.body.appendChild(element);
-		element.addEventListener("animationend", () =>
-		{
-			element.remove();
-		});  
+			element.classList.add("bounce");
+			element.style.left = `${cursorX-90}px`;
+			element.style.top = `${cursorY-90}px`;
+			document.body.appendChild(element);
+			element.addEventListener("animationend", () =>
+			{
+				element.remove();
+			});
 		}
 	});
 	document.addEventListener("keydown", (event) =>

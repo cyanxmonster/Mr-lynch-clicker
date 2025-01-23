@@ -151,6 +151,16 @@ button:disabled {
     left: 50%;
     transform: translate(-50%,-50%);
 }
+#cardList::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3); /* Darkens background slightly */
+    z-index: -1;
+}
   #cardList {
     height: 100px;
     width: 800px;
@@ -165,6 +175,8 @@ button:disabled {
     text-align: center;
     border-left: 1px solid black;
     border-right: 1px solid black;
+    background: url('https://media.licdn.com/dms/image/v2/D5603AQE-7fT7-jY3yg/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1679956748343?e=2147483647&v=beta&t=_4IsMARWqJmmjM_17_15KyBN7oih3MuuRWpMtjUkXac') no-repeat center center;
+    background-size: cover;
     width: 100px;
     height: 100px;
   } 
@@ -184,6 +196,11 @@ button:disabled {
     scale:0.1;
     transition: transform ease-out 1s;
 }
+.common { background-color: rgba(255, 0, 0, 0.5); }      /* Transparent Red */
+.uncommon { background-color: rgba(0, 255, 0, 0.5); }    /* Transparent Green */
+.rare { background-color: rgba(0, 0, 255, 0.5); }        /* Transparent Blue */
+.epic { background-color: rgba(128, 0, 128, 0.5); }      /* Transparent Yellow */
+.legendary { background-color: rgba(255, 255, 0,0.5); } /* Transparent Purple */
 @keyframes bounce {
     0% {
       transform: translateY(0);
