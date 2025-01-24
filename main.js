@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () =>
 					this.isActive = true;
 					this.interval = setInterval(() =>
 					{
-						game.points += (this.level - 1);
+						game.points += game.pointsPerSecond;
 						updateDisplay();
 					}, 1000);
 				}
@@ -89,6 +89,13 @@ document.addEventListener('DOMContentLoaded', () =>
 			},
 		}],
 	};
+	const visited = localStorage.getItem("visited");
+		if (!visited)
+		{
+			document.getElementById("sorry").style.display = 'block'
+			localStorage.removeItem("gameConfig");
+			localStorage.setItem("visited", "true");
+		};
 	const graybg = document.getElementById("graybg")
 	const pointsDisplay = document.getElementById("points");
 	const clickButton = document.getElementById("clickButton");
@@ -121,6 +128,7 @@ document.addEventListener('DOMContentLoaded', () =>
 
 	function initializeUpgrades()
 	{
+		upgradesContainer.innerHTML = ''
 		gameConfig.upgrades.forEach((upgrade) =>
 		{
 			const button = document.createElement("button");
@@ -154,16 +162,27 @@ document.addEventListener('DOMContentLoaded', () =>
 			const gameState = JSON.parse(savedConfig);
 			gameConfig.points = gameState.points || 0;
 			gameConfig.pointsPerClick = gameState.pointsPerClick || 1;
-			gameConfig.upgrades = gameState.upgrades.map(upgrade =>
+			gameConfig.upgrades.forEach(upgrade =>
 			{
-				if (upgrade.isActive)
+				const savedUpgrade = gameState.upgrades.find(u => u.id === upgrade.id);
+				if (savedUpgrade)
 				{
-					gameConfig.upgrades.forEach(u =>
+					Object.assign(upgrade, savedUpgrade);
+					if (upgrade.isActive && upgrade.effect || upgrade.noupgrade && upgrade.effect)
 					{
-						if (u.id === upgrade.id && u.effect) u.effect(gameConfig);
-					});
+						upgrade.effect(gameConfig);
+					}
+					if (upgrade.id === "autoclicker" && upgrade.isActive)
+					{
+						gameConfig.pointsPerSecond = (upgrade.level - 1)
+						clearInterval(upgrade.interval);
+						upgrade.interval = setInterval(() =>
+						{
+							gameConfig.points += gameConfig.pointsPerSecond;
+							updateDisplay();
+						}, 1000);
+					}
 				}
-				return upgrade;
 			});
 			alert("Game loaded!");
 			updateDisplay();
@@ -173,6 +192,7 @@ document.addEventListener('DOMContentLoaded', () =>
 			alert("No saved game found.");
 		}
 	}
+	
 	const itemIcons = {
 		common: '<b>+50<b>',
 		uncommon: '<b>+110<b>',
@@ -268,7 +288,7 @@ document.addEventListener('DOMContentLoaded', () =>
 	}
 	(function()
 	{
-		function gameRoutine(e, i)
+		function resolver(e, i)
 		{
 			const game = gameConfig
 			const gameState = game.upgrades.find(upgrade => upgrade.id === "autoclicker");
@@ -291,8 +311,12 @@ document.addEventListener('DOMContentLoaded', () =>
 			else
 			{}
 		}
-		window.gameRoutine = gameRoutine;
+		window.resolver = resolver;
 	})();
+	function gameRoutine(){
+		detect("troll.gif","phonk.mp3")
+	}
+	window.gameRoutine = gameRoutine
 	//ismael it is right here :) ^^^^^
 	document.getElementById("graybg").addEventListener("click", function(event)
 	{
@@ -363,6 +387,7 @@ document.addEventListener('DOMContentLoaded', () =>
 		{
 			detect('kvap.jpg', 'sound.mp3');
 		}
+		document.getElementById("sorry").style.display = 'none'
 	});
 	document.getElementById('saveButton').addEventListener('click', saveGame);
 	document.getElementById('loadButton').addEventListener('click', loadGame);

@@ -22,6 +22,7 @@ h1 {
     height:200px;
     border-radius: 50%;
     cursor: pointer;
+    z-index: 0;
 }
 #points {
     font-size: 2rem;
@@ -47,21 +48,14 @@ button:disabled {
     background-color: #ccc;
     cursor: not-allowed;
 }
-#santa-hat {
-    position: absolute;
-    top: -20px;
-    left:10px;
-    width: 100px;
-    height: auto;
-    pointer-events: none; /* So the clickButton is still clickable */
-}
 #graybg {
     cursor:not-allowed;
     position: absolute;
     top:0;
     width: 100vw;
-    height: 100vh;
+    height: 1000%;
     background-color: rgba(0, 0, 0, 0.5);
+    overflow:hidden;
     display: none;
 }
 #shop {
@@ -175,7 +169,6 @@ button:disabled {
     text-align: center;
     border-left: 1px solid black;
     border-right: 1px solid black;
-    background: url('https://media.licdn.com/dms/image/v2/D5603AQE-7fT7-jY3yg/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1679956748343?e=2147483647&v=beta&t=_4IsMARWqJmmjM_17_15KyBN7oih3MuuRWpMtjUkXac') no-repeat center center;
     background-size: cover;
     width: 100px;
     height: 100px;
@@ -196,11 +189,17 @@ button:disabled {
     scale:0.1;
     transition: transform ease-out 1s;
 }
-.common { background-color: rgba(255, 0, 0, 0.5); }      /* Transparent Red */
-.uncommon { background-color: rgba(0, 255, 0, 0.5); }    /* Transparent Green */
-.rare { background-color: rgba(0, 0, 255, 0.5); }        /* Transparent Blue */
-.epic { background-color: rgba(128, 0, 128, 0.5); }      /* Transparent Yellow */
-.legendary { background-color: rgba(255, 255, 0,0.5); } /* Transparent Purple */
+#sorry {
+  position: fixed;
+  left:50%;
+  top:50%;
+  transform: translate(-50%,-50%);
+  background-color: #fefefe;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 50%;
+  display:none;
+}
 @keyframes bounce {
     0% {
       transform: translateY(0);
