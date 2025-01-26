@@ -194,11 +194,11 @@ document.addEventListener('DOMContentLoaded', () =>
 	}
 	
 	const itemIcons = {
-		common: '<b>+50<b>',
-		uncommon: '<b>+110<b>',
-		rare: '<b>+150<b>',
-		epic: '<b>+200<b>',
-		legendary: '<b>+1000<b>'
+		common: '<img width="100" height="100"src="red.jpg">',
+		uncommon: '<img width="100" height="100"src="green.jpg">',
+		rare: '<img width="100" height="100"src="blue.jpg">',
+		epic: '<img width="100" height="100"src="purple.jpg">',
+		legendary: '<img width="100" height="100"src="gold.jpg">'
 	};
 	const cardList = document.getElementById('cardList');
 
