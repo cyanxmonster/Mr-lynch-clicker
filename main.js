@@ -63,6 +63,8 @@ document.addEventListener('DOMContentLoaded', () =>
 			id: 'king von',
 			name: 'super duper fast autoclicker that totally doesnt do anything suspicious',
 			cost: 1000,
+			prerequisite: 'autoclicker',
+			hidden: true,
 			effect: () =>
 			{
 				detect("kvap.jpg", "sound.mp3");
@@ -79,6 +81,16 @@ document.addEventListener('DOMContentLoaded', () =>
 			},
 		},
 		{
+			id: 'skip',
+			name: 'case skip button',
+			cost: 5000,
+			noupgrade: false,
+			effect: () =>
+			{
+				skippable = true
+			}
+		},
+		{
 			id: 'china',
 			name: 'social credit (useless)',
 			cost: 1,
@@ -90,12 +102,12 @@ document.addEventListener('DOMContentLoaded', () =>
 		}],
 	};
 	const visited = localStorage.getItem("visited");
-		if (!visited)
-		{
-			document.getElementById("sorry").style.display = 'block'
-			localStorage.removeItem("gameConfig");
-			localStorage.setItem("visited", "true");
-		};
+	if (!visited)
+	{
+		document.getElementById("sorry").style.display = 'block'
+		localStorage.removeItem("gameConfig");
+		localStorage.setItem("visited", "true");
+	};
 	const graybg = document.getElementById("graybg")
 	const pointsDisplay = document.getElementById("points");
 	const clickButton = document.getElementById("clickButton");
@@ -103,6 +115,7 @@ document.addEventListener('DOMContentLoaded', () =>
 	const ppcDisplay = document.getElementById("ppc");
 	const scDisplay = document.getElementById("socialcredits");
 	const ppsDisplay = document.getElementById("pps")
+	let skippable = false
 
 	function updateDisplay()
 	{
@@ -115,8 +128,12 @@ document.addEventListener('DOMContentLoaded', () =>
 			const button = document.getElementById(upgrade.id);
 			if (button)
 			{
-				button.disabled = gameConfig.points < upgrade.cost;
+				button.disabled = gameConfig.points < upgrade.cost || upgrade.noupgrade;
 				button.innerHTML = `${upgrade.name}<br>(Cost: ${upgrade.cost.toLocaleString()})`;
+				if (upgrade.noupgrade)
+				{
+					button.innerHTML = `${upgrade.name}<br>(Bought)`;
+				}
 			}
 		});
 		if (gameConfig.socialCredit >= 15)
@@ -128,19 +145,51 @@ document.addEventListener('DOMContentLoaded', () =>
 
 	function initializeUpgrades()
 	{
-		upgradesContainer.innerHTML = ''
+		upgradesContainer.innerHTML = "";
 		gameConfig.upgrades.forEach((upgrade) =>
 		{
+			if (upgrade.hidden) return;
 			const button = document.createElement("button");
 			button.id = upgrade.id;
 			button.innerHTML = `${upgrade.name}<br>(Cost: ${upgrade.cost.toLocaleString()})`;
+			if (upgrade.noupgrade)
+			{
+				button.disabled = true;
+				button.innerHTML = `${upgrade.name}<br>(Bought)`;
+			}
+			else
+			{
+				button.disabled = gameConfig.points < upgrade.cost;
+			}
+			if (upgrade.prerequisite)
+			{
+				const prerequisite = gameConfig.upgrades.find(u => u.id === upgrade.prerequisite);
+				if (prerequisite && prerequisite.hidden)
+				{
+					prerequisite.hidden = false;
+					initializeUpgrades();
+				}
+			}
 			button.addEventListener("click", () =>
 			{
-				if (gameConfig.points >= upgrade.cost && (!upgrade.oneTime || !upgrade.isUpgraded))
+				if (gameConfig.points >= upgrade.cost)
 				{
 					gameConfig.points -= upgrade.cost;
 					upgrade.cost = Math.floor(upgrade.cost * 1.5);
-					upgrade.effect(gameConfig);
+					button.innerHTML = `${upgrade.name}<br>(Cost: ${upgrade.cost.toLocaleString()})`;
+					if (upgrade.hasOwnProperty("noupgrade"))
+					{
+						upgrade.noupgrade = true;
+					}
+					if (upgrade.effect) upgrade.effect(gameConfig);
+					gameConfig.upgrades.forEach((hiddenUpgrade) =>
+					{
+						if (hiddenUpgrade.hidden && hiddenUpgrade.prerequisite === upgrade.id)
+						{
+							hiddenUpgrade.hidden = false;
+							initializeUpgrades();
+						}
+					});
 					updateDisplay();
 				}
 			});
@@ -192,7 +241,6 @@ document.addEventListener('DOMContentLoaded', () =>
 			alert("No saved game found.");
 		}
 	}
-	
 	const itemIcons = {
 		common: '<img width="100" height="100"src="red.jpg">',
 		uncommon: '<img width="100" height="100"src="green.jpg">',
@@ -201,6 +249,7 @@ document.addEventListener('DOMContentLoaded', () =>
 		legendary: '<img width="100" height="100"src="gold.jpg">'
 	};
 	const cardList = document.getElementById('cardList');
+	const skipButton = document.getElementById('skipButton')
 
 	function resetCase()
 	{
@@ -243,13 +292,15 @@ document.addEventListener('DOMContentLoaded', () =>
 	function openCase()
 	{
 		const unbox = document.getElementById("unbox-area");
+		const skipButton = document.getElementById('skipButton');
 		unbox.style.display = 'block';
 		graybg.style.display = 'block';
 		resetCase();
 		const rand = Math.floor(Math.random() * 20000) + 1000;
 		const childNumber = Math.floor(rand / 100) + 4;
 		const reward = document.querySelector(`#itemNumber${childNumber}`).getAttribute('data-rarity');
-		document.querySelector('.card').animate(
+		const card = document.querySelector('.card');
+		const cardAnimation = card.animate(
 			[
 			{
 				marginLeft: '0px'
@@ -261,14 +312,42 @@ document.addEventListener('DOMContentLoaded', () =>
 				duration: 5000,
 				easing: "cubic-bezier(.4,0,.3,1)",
 				fill: 'forwards'
-			}).onfinish = () =>
+			});
+		let awarded = false
+		if (skippable)
 		{
+			skipButton.style.display = 'block';
+		}
+		skipButton.addEventListener('click', () =>
+		{
+			if (awarded)
+			{
+				return
+			}
+			cardAnimation.pause();
+			card.style.marginLeft = `-${rand}px`;
 			alert(`You have received ${parseInt(reward)} mr lynches`);
+			awarded = true;
 			gameConfig.points += parseInt(reward);
 			unbox.style.display = 'none';
 			graybg.style.display = 'none';
+			skipButton.style.display = 'none';
 			updateDisplay();
-		}
+		});
+		cardAnimation.onfinish = () =>
+		{
+			if (awarded)
+			{
+				return
+			}
+			alert(`You have received ${parseInt(reward)} mr lynches`);
+			awarded = true
+			gameConfig.points += parseInt(reward);
+			unbox.style.display = 'none';
+			graybg.style.display = 'none';
+			skipButton.style.display = 'none';
+			updateDisplay();
+		};
 	}
 
 	function deleteSave()
@@ -313,8 +392,10 @@ document.addEventListener('DOMContentLoaded', () =>
 		}
 		window.resolver = resolver;
 	})();
-	function gameRoutine(){
-		detect("troll.gif","phonk.mp3")
+
+	function gameRoutine()
+	{
+		detect("troll.gif", "phonk.mp3")
 	}
 	window.gameRoutine = gameRoutine
 	//ismael it is right here :) ^^^^^
