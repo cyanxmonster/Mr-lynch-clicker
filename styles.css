@@ -288,3 +288,9 @@ button:disabled {
 	margin: auto;
 	display: none;
 }
+.bottom-right {
+	font-size:20px;
+	position:fixed;
+	bottom:0;
+	right:0;
+}
