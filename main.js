@@ -223,7 +223,11 @@ document.addEventListener('DOMContentLoaded', () =>
 					}
 					if (upgrade.id === "autoclicker" && upgrade.isActive)
 					{
-						gameConfig.pointsPerSecond = (upgrade.level - 1)
+						gameConfig.pointsPerSecond = gameState.pointsPerSecond;
+						if (gameConfig.pointsPerSecond >= 15){
+							alert("no way u got that legit lmaoo ur save is being deleted");
+							deleteSave();
+						}
 						clearInterval(upgrade.interval);
 						upgrade.interval = setInterval(() =>
 						{
