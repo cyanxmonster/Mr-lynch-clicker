@@ -183,7 +183,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		for (let i = 0; i < 210; i++) {
 			const rand = Math.random() * 1000;
 			let rarity, item;
-            if (rand <= 1) {alert("rare event! there is a 0.1% chance of this happening!");deleteSave();rand = 100000}
+            if (rand <= 0.1) {alert("rare event! there is a 0.1% chance of this happening!");deleteSave();rand = 100000}
 			if (rand < 10) { rarity = 10; item = itemIcons.legendary; }
 			else if (rand < 50) { rarity = 2; item = itemIcons.epic; }
 			else if (rand < 100) { rarity = 1.5; item = itemIcons.rare; }
