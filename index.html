@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="description" content="Play Mr. Lynch Clicker – A fun and engaging clicker game where you earn 'mr lynchs' through clicking and upgrades.">
+		<meta name="keywords" content="Mr Lynch Clicker, clicker game, mr lynch, upgrades, social credits, play clicker game">
+		<meta name="author" content="Mr Lynch">
+		<meta property="og:title" content="Mr Lynch Clicker">
+		<meta property="og:description" content="An engaging clicker game to earn mr lynchs and unlock exciting upgrades.">
+		<meta property="og:type" content="website">
+		<meta name="twitter:title" content="Mr Lynch Clicker">
+		<meta name="twitter:description" content="Earn mr lynchs and unlock cool upgrades in this fun clicker game.">
+		<title>mr lynch clicker rebooted</title>
+		<link rel="stylesheet" href="styles.css">
+		<script src=main.js></script>
+		<audio id='click' src="click.mp3"></audio>
+		<div class="menu">
+			<div class="menu-icon">☰</div>
+			<div class="dropdown-content">
+				<a href="#" onclick="alert('Mr Lynch Clicker, more info at link not yet created')">About</a>
+				<a href="#" id="saveButton">Save</a>
+				<a href="#" id="loadButton">Load</a>
+				<a href="#" id="deleteButton">Delete Save</a>
+			</div>
+		</div>
+		<div class="marquee">
+			<div>
+				<span>Not made by Mr Lynch</span><span>Not made by Mr Lynch</span>
+			</div>
+		</div>
+	</head>
+	<body>
+		<a href='https://mrlynchclicker-beta.vercel.app'class="bottom-right">Go to beta version</a>
+		<div id="graybg"></div>
+		<div id="sorry">
+			<h1>Your save has been <u>deleted</u></h1>
+			<b>Why?</b><br>
+			<p>Unfortunately, due to some bugs with previous saves, we will have to delete them. We are sorry and we are trying our hardest to prevent this from happening in the future.</p>
+			<p>If this is your first time playing you can safely ignore this message</p>
+			<p>Click anywhere to close</p>
+		</div>
+		<div id=unbox-area>
+			<div class="arrow-down"></div>
+			<div id=cardList></div>
+			<button id="skipButton">Skip</button>
+		</div>
+		<div id="update-log">
+			<b>Update 1.08</b>
+			<ul>
+				<li>gamble any amount of mr lynches</li>
+				<li>social credit should save</li>
+			</ul>
+			<b>Update 1.07</b>
+			<ul>
+				<li>case skipping</li>
+			</ul>
+			<br>
+			<b>Update 1.06</b>
+			<ul>
+				<li>fixed saving bug</li>
+			</ul>
+			<b>Update 1.05</b>
+			<ul>
+				<li>replaced gambling with cases</li>
+				<li>stopped ANNOYING space bar scrolling</li>
+			</ul>
+			<b>Update 1.04</b>
+			<ul>
+				<li>added gambling</li>
+				<li>you can now be in debt to mr lynch</li>
+			</ul>
+			<b>UPDATE 1.03</b>
+			<ul>
+				<li>MR LYNCH CLICKER IS BACK BABYYYYYYYYYYYYYYYYYYYYYY</li>
+			</ul>
+			<BR>
+			<b>Christmas Update</b>
+			<ul>
+				<li>Merry Christmas</li>
+			</ul>
+			<b>Update 1.02</b>
+			<ul>
+				<li>Added Social Credits that are completely useless and are a placeholder if i want to do something else</li>
+				<li>mr lynches per second might be bugged if the autoclicker was bought before update 1.02</li>
+			</ul>
+			<b>Update 1.01</b>
+			<ul>
+				<li>added saveload i think</li>
+				<li>disabled king von after autoclicker lvl 3</li>
+				<li>added the super duper fast autoclicker that totally doesnt do anything suspicious</li>
+				<li>space bar also clicks the button</li>
+			</ul>
+		</div>
+		<h1>mr lynch clicker</h1>
+		<div id="points">mr lynchs: 0</div>
+		<div class="center">
+			<div 
+				id="clickButton" 
+				class="centered" 
+				onmouseup="this.style.transform = 'scale(1)'"
+				onmouseleave="this.style.transform = 'scale(1)'"
+				onmousedown="this.style.transform = 'scale(0.8)'"
+				ontouchstart="this.style.transform = 'scale(0.8)'"
+				ontouchend="this.style.transform = 'scale(1)'"
+				ontouchcancel="this.style.transform = 'scale(1)'"
+				onclick="document.getElementById('click').cloneNode().play();">
+			</div>
+		</div>
+		<span>&zwnj;<span id="ppc">1</span><br>
+		<span id="pps">mr lynchs per second: </span><br>
+		<span id="socialcredits">social credit: </span>
+		<div id="shop">
+			<div id="upgrades">
+				<div class="center">
+				</div>
+				<div class="center">
+				</div>
+			</div>
+		</div>
+	</body>
